@@ -1,0 +1,11 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Central global store state document (store/global)
+    // Readable by all storefront visitors and writable by the store Admin Panel
+    match /store/{docId} {
+      allow read: if true;
+      allow write: if true;
+    }
+  }
+}

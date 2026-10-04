@@ -1,0 +1,161 @@
+{
+  "settings": {
+    "storeName": "Liyau",
+    "tagline": "Nepal's Trusted Modern Online Store",
+    "logoUrl": "/src/assets/images/liyau_logo.svg",
+    "heroBannerUrl": "/src/assets/images/khojau_hero_nepal_1791032655932.jpg",
+    "promoBannerUrl": "/src/assets/images/banner_tech_lifestyle_1790995930360.jpg",
+    "nepalFlagUrl": "",
+    "heroBadgeText": "Authentic Nepali Store",
+    "heroTitle": "Genuine Products & Nepali Craftsmanship, Delivered Across Nepal.",
+    "heroSubtitle": "Handpicked everyday essentials, pure Himalayan cashmere, organic mountain teas, and verified electronics dispatched directly from our Butwal, Nepal hub with verified QR payment.",
+    "contactPhone": "+977-9801234567",
+    "contactEmail": "support@liyau.com",
+    "storeAddress": "Traffic Chowk, Butwal, Nepal",
+    "announcementText": "🇳🇵 लियौँ — Butwal, Nepal | Fast Nationwide Delivery Across All 7 Provinces",
+    "announcementActive": true,
+    "deliveryKathmanduFee": 50,
+    "deliveryOutsideFee": 150,
+    "freeDeliveryThreshold": 2000,
+    "returnPolicyText": "7-Day Hassle-Free Returns & Exchanges. If the item is defective or incorrect, we offer instant replacement or 100% refund upon return inspection.",
+    "deliveryInfoText": "Orders within Butwal & Rupandehi are delivered within 24-48 hours. Orders across all major cities and provinces in Nepal are delivered in 2-4 business days.",
+    "socialLinks": {
+      "facebook": "https://facebook.com",
+      "instagram": "https://instagram.com",
+      "tiktok": "https://tiktok.com",
+      "whatsapp": "+9779801234567"
+    },
+    "aiSettings": {
+      "enabled": true,
+      "assistantName": "Liyau Thinker",
+      "welcomeMessage": "Namaste! 🙏 I am Liyau Thinker, your shopping assistant for Liyau (लियौँ) in Butwal, Nepal. How can I help you today?",
+      "tone": "Friendly, helpful, honest, and culturally respectful Nepali shopping guide",
+      "storeBio": "Liyau (लियौँ) is an authentic Nepali online shopping store based in Butwal, Nepal, founded by Shishir Pokhrel in Butwal, Nepal. We connect customers across Nepal with genuine products, local craftsmanship, and verified electronics with secure QR digital payments.",
+      "faqList": [
+        {
+          "question": "Where is Liyau store located?",
+          "answer": "Liyau is proudly based in Butwal, Nepal. Our main office and fulfillment hub is located in Butwal, Nepal, and we deliver nationwide across all provinces of Nepal."
+        },
+        {
+          "question": "How do I make payment?",
+          "answer": "You can pay securely via QR Payment using eSewa, Khalti, Fonepay, or any Nepali Mobile Banking app. After scanning the official QR code and completing payment, submit your Transaction ID for verification."
+        },
+        {
+          "question": "What is your delivery charge?",
+          "answer": "Local delivery in Butwal & Rupandehi is Rs. 50 (Free for orders above Rs. 2,000). Nationwide delivery outside Butwal across Nepal is Rs. 150 flat."
+        },
+        {
+          "question": "What is your return policy?",
+          "answer": "We offer a 7-day hassle-free return and replacement policy for damaged, defective, or incorrect products."
+        }
+      ],
+      "suggestedQuestions": [
+        "Where is Liyau located in Nepal?",
+        "How does QR payment work on Liyau?",
+        "What are the delivery charges from Butwal?",
+        "Who is the founder of Liyau?"
+      ],
+      "customInstructions": "CRITICAL: Liyau is strictly based in Butwal, Nepal. Always state Butwal, Nepal whenever business location is asked or relevant. Never say Liyau is based in Kathmandu. Answer questions using only the actual current website and database information (products, prices, discounts, offers, orders, QR payment, Butwal location, contact details, delivery info, return policy, About Liyau, and Founder Shishir Pokhrel). Never invent products, prices, stock, or policies."
+    },
+    "founder": {
+      "name": "Shishir Pokhrel",
+      "role": "Founder & Owner of Liyau",
+      "photoUrl": "/src/assets/images/founder_shishir_1790996757613.jpg",
+      "bio": "Hi, I'm Shishir Pokhrel. I started Liyau right here in Butwal, Nepal because I wanted to build an honest, reliable Nepali online store where finding genuine products is straightforward and headache-free. Rather than overwhelming people with endless clutter and fake discounts, I focus on handpicking real, dependable items and delivering them safely across Nepal with verified QR digital payment and dedicated local care.",
+      "website": "https://shishirpokhrel.com.np"
+    },
+    "aboutBrand": {
+      "aboutKhojau": "Liyau (लियौँ) is a modern Nepali online shopping brand based in Butwal, Nepal, created to make finding and ordering useful products simple and convenient. The goal is to bring interesting and useful products to customers through a clean, easy-to-use online shopping experience.",
+      "brandDescription": "Based in Butwal, Nepal, Liyau is built on trust, transparency, and personal care. We inspect every product at our Butwal hub before it reaches your hands and provide dependable delivery throughout Butwal, Rupandehi, and all major cities across Nepal.",
+      "mission": "To deliver genuinely useful products and authentic Nepali heritage crafts from Butwal, Nepal to homes across the nation with unmatched reliability and friendly customer support."
+    },
+    "promotionalOffer": {
+      "enabled": true,
+      "title": "दशैंको विशेष अफर 🎉",
+      "subtitle": "सबै उत्पादनमा २५% सम्म छुट!",
+      "discountPercentage": 25,
+      "buttonText": "अहिले किनमेल गर्नुहोस्",
+      "popupImageUrl": ""
+    },
+    "qrPaymentSettings": {
+      "enabled": true,
+      "qrImageUrl": "",
+      "providerName": "eSewa / Fonepay / Khalti / Mobile Banking",
+      "accountName": "Liyau Online Store",
+      "accountNumber": "9801234567",
+      "instructions": "तलको QR स्क्यान गरेर भुक्तानी गर्नुहोस्। भुक्तानी गरेपछि Transaction ID राख्नुहोस्।"
+    },
+    "websiteTexts": {
+      "topNepaliBrandText": "लियौँ",
+      "topLocationText": "Butwal, Nepal",
+      "topRightBadgeText": "नेपालभर डेलिभरी",
+      "searchPlaceholder": "Search products in Liyau...",
+      "askAiButtonText": "Liyau Thinker",
+      "heroPrimaryButtonText": "Browse Catalog",
+      "heroSecondaryButtonText": "Ask Liyau Thinker",
+      "heroTrust1Title": "Fast Shipping",
+      "heroTrust1Sub": "From Butwal, Nepal",
+      "heroTrust2Title": "QR Payment",
+      "heroTrust2Sub": "eSewa · Khalti · Banking",
+      "heroTrust3Title": "7-Day Return",
+      "heroTrust3Sub": "Easy replacement",
+      "heroCardBadge": "Liyau Verified Store",
+      "heroCardBox1Title": "Verified QR Payment",
+      "heroCardBox1Desc": "Scan to pay with eSewa, Khalti, or any Nepali Mobile Banking app. Order verification is fast and transparent.",
+      "heroCardBox2Title": "Nationwide Delivery from Butwal, Nepal",
+      "heroCardBox2Desc": "Every order is carefully inspected and dispatched directly from our Butwal, Nepal hub across all provinces of Nepal.",
+      "heroCardButtonText": "Explore Store Catalog",
+      "catalogEmptyTitle": "New Products Coming Soon",
+      "catalogEmptySubtitle": "Our Butwal, Nepal store catalog is ready for new products. Add products anytime from the Admin Dashboard.",
+      "promoSectionBadge": "Featured Tech & Craftsmanship",
+      "promoSectionTitle": "Authentic Nepali Goods & Verified Modern Essentials",
+      "promoSectionSubtitle": "Every order is hand-checked at our Butwal, Nepal hub before dispatch. Enjoy verified QR digital payments, prompt replacement warranty, and dedicated customer support.",
+      "promoPrimaryButton": "Explore Electronics",
+      "promoSecondaryButton": "Explore Handicrafts",
+      "testimonialsHeading": "What Customers Say About Liyau",
+      "testimonialsSubheading": "Verified reviews from satisfied shoppers across Butwal, Bhairahawa, Pokhara, and beyond.",
+      "testimonialsRatingBadge": "4.9 / 5.0 Customer Rating",
+      "testimonial1Name": "Sushila Shrestha",
+      "testimonial1Location": "Verified Buyer · Butwal, Nepal",
+      "testimonial1Quote": "Received my order in Butwal within 24 hours. Smooth QR payment and the packaging was super secure!",
+      "testimonial2Name": "Bikash Adhikari",
+      "testimonial2Location": "Verified Buyer · Tilottama",
+      "testimonial2Quote": "Genuine quality products at honest prices. Ordering from Tilottama was effortless and customer support was very polite.",
+      "testimonial3Name": "Anjali Thapa",
+      "testimonial3Location": "Verified Buyer · Pokhara",
+      "testimonial3Quote": "Ordered from Butwal to Pokhara and received it in 2 days. Everything matched the description 100%.",
+      "footerValue1Title": "Fast Nationwide Delivery",
+      "footerValue1Sub": "Dispatched from Butwal, Nepal to all 7 provinces",
+      "footerValue2Title": "100% Genuine Guarantee",
+      "footerValue2Sub": "Inspected at our Butwal, Nepal hub before shipping",
+      "footerValue3Title": "7-Day Easy Returns",
+      "footerValue3Sub": "Hassle-free replacement or refund",
+      "footerBrandSummary": "Authentic Nepali online shopping store based in Butwal, Nepal for genuine electronics, local craftsmanship, and everyday essentials.",
+      "footerDispatchNote": "Deliveries fulfilled daily from our Butwal, Nepal packaging hub.",
+      "footerCopyrightText": "Butwal, Nepal. All rights reserved.",
+      "checkoutQrInstruction1": "तलको QR स्क्यान गरेर भुक्तानी गर्नुहोस्।",
+      "checkoutQrInstruction2": "भुक्तानी गरेपछि Transaction ID राख्नुहोस्।",
+      "checkoutPaidButtonText": "मैले भुक्तानी गरेँ (I Have Paid)",
+      "checkoutProofHeading": "भुक्तानी पुष्टि विवरण राख्नुहोस्",
+      "checkoutProofSubheading": "Transaction ID / Reference Number पेश गरेपछि तपाईंको अर्डर सुरक्षित हुन्छ।",
+      "checkoutVerificationNote": "विवरण पेश गरेपछि तपाईंको भुक्तानी Pending Verification मा रहनेछ। एडमिनले रकम बैंकमा प्रमाणीकरण गरेपछि अर्डर डेलिभरीका लागि प्रस्थान हुनेछ।",
+      "namasteSuccessTitle": "धन्यवाद! 🙏",
+      "namasteSuccessSubtitle": "तपाईंको भुक्तानी विवरण प्राप्त भयो।",
+      "namasteSuccessMessage": "तपाईंको अर्डर पुष्टि भएपछि हामी तपाईंलाई जानकारी दिनेछौँ।",
+      "orderConfirmHeading": "तपाईंको अर्डरका लागि धन्यवाद। 🙏",
+      "orderConfirmNote": "हाम्रो बुटवल टिमले तपाईंको भुक्तानी रुजु गरेपछि सामान प्याक गरी डेलिभरीका लागि पठाउनेछ।"
+    }
+  },
+  "products": [],
+  "reviews": [],
+  "orders": [],
+  "customers": [],
+  "adminCredentials": {
+    "email": "admin@liyau.com",
+    "username": "admin",
+    "passwordHash": "2ed5d2049dfb257577e1f7ff88c0812160f64f3b0e52bf107cf3c192dfa854215a57e70f2f0d0f20bc51d6dbafd7b5943dfbaae428707f8e1fc6de3c3a02fe5d",
+    "salt": "a1b2c3d4e5f607182930415263748596",
+    "isConfigured": true,
+    "updatedAt": "2026-10-04T03:00:00.000Z"
+  }
+}

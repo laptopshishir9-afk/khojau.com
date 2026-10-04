@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 330 84" width="330" height="84" fill="none">
+  <!-- Official Liyau (लियौँ) Nepali E-commerce Brand Logo -->
+  <defs>
+    <linearGradient id="liyauBagGrad" x1="10" y1="14" x2="62" y2="70" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#EF4444" />
+      <stop offset="100%" stop-color="#B91C1C" />
+    </linearGradient>
+    <linearGradient id="liyauHandleGrad" x1="25" y1="4" x2="47" y2="18" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#003893" />
+      <stop offset="100%" stop-color="#1E40AF" />
+    </linearGradient>
+  </defs>
+  <g>
+    <!-- Modern Geometric Shopping Bag Emblem -->
+    <path d="M25 20V14.5C25 9.25329 29.2533 5 34.5 5H37.5C42.7467 5 47 9.25329 47 14.5V20" stroke="url(#liyauHandleGrad)" stroke-width="5" stroke-linecap="round"/>
+    <rect x="10" y="18" width="52" height="52" rx="14" fill="url(#liyauBagGrad)"/>
+    <!-- Subtle Himalayan Peak & Smile Curve Inside Bag -->
+    <path d="M21 54L30.5 39L37.5 48L43 41.5L51 54H21Z" fill="white" fill-opacity="0.96"/>
+    <circle cx="44.5" cy="30.5" r="3.2" fill="#FDE047"/>
+    <!-- Handle Rivets -->
+    <circle cx="25" cy="24" r="2.2" fill="white"/>
+    <circle cx="47" cy="24" r="2.2" fill="white"/>
+
+    <!-- Devanagari Primary Brand Wordmark: लियौँ -->
+    <text x="74" y="54" font-family="'Plus Jakarta Sans', 'Mukta', 'Noto Sans Devanagari', 'Hind', system-ui, sans-serif" font-size="42" font-weight="900" fill="#DC2626" letter-spacing="-0.5">
+      लियौँ
+    </text>
+    <circle cx="176" cy="49" r="4.5" fill="#003893"/>
+
+    <!-- Clean English Sub-Wordmark -->
+    <text x="76" y="69" font-family="'Plus Jakarta Sans', 'Outfit', system-ui, sans-serif" font-size="9.5" font-weight="800" fill="#52525B" letter-spacing="3.8">
+      LIYAU NEPAL
+    </text>
+  </g>
+</svg>

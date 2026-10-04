@@ -1,0 +1,6 @@
+{
+  "name": "Liyau - Nepali Online Shopping Store",
+  "description": "Liyau (लियौँ) is an authentic Nepali online shopping store based in Butwal, Nepal, offering genuine electronics, local craftsmanship, and nationwide delivery with verified QR digital payments.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

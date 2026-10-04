@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <link rel="icon" type="image/svg+xml" href="./src/assets/images/khojau_logo.svg" />
+    <title>Khojau (खोजौँ) – Authentic Online Shopping Store in Butwal, Nepal</title>
+    <meta
+      name="description"
+      content="Khojau (खोजौँ) is an authentic Nepali online shopping store based in Butwal, Nepal, offering genuine electronics, local craftsmanship, and nationwide delivery with verified QR digital payments."
+    />
+    <meta name="keywords" content="Khojau, खोजौँ, Butwal online shopping, Nepal online store, Butwal Nepal e-commerce, QR payment Nepal, Shishir Pokhrel" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Khojau Nepal" />
+    <meta property="og:title" content="Khojau (खोजौँ) – Authentic Online Shopping Store in Butwal, Nepal" />
+    <meta
+      property="og:description"
+      content="Khojau (खोजौँ) is an authentic Nepali online shopping store based in Butwal, Nepal, offering genuine electronics, local craftsmanship, and nationwide delivery with verified QR digital payments."
+    />
+    <meta property="og:locale" content="en_NP" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Khojau (खोजौँ) – Authentic Online Shopping Store in Butwal, Nepal" />
+    <meta
+      name="twitter:description"
+      content="Khojau (खोजौँ) is an authentic Nepali online shopping store based in Butwal, Nepal, offering genuine electronics, local craftsmanship, and nationwide delivery with verified QR digital payments."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react@19.0.0",
+          "react/jsx-runtime": "https://esm.sh/react@19.0.0/jsx-runtime",
+          "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
+          "lucide-react": "https://esm.sh/lucide-react@0.475.0?external=react",
+          "motion/react": "https://esm.sh/motion@12.4.7/react?external=react,react-dom"
+        }
+      }
+    </script>
+  </head>
+  <body class="bg-[#FAFAFA] text-[#18181B] antialiased selection:bg-red-500 selection:text-white overflow-x-hidden">
+    <div id="root"></div>
+    <script>
+      (function () {
+        if (window.__khojauMounted || window.__khojauStaticBooting) return;
+        window.__khojauStaticBooting = true;
+
+        var cssLink = document.createElement('link');
+        cssLink.rel = 'stylesheet';
+        cssLink.href = './src/static-bundle.css';
+        document.head.appendChild(cssLink);
+
+        var prebuiltScript = document.createElement('script');
+        prebuiltScript.type = 'module';
+        prebuiltScript.src = './src/static-bundle.js';
+        prebuiltScript.onerror = function () {
+          bootBabelFallback();
+        };
+        document.body.appendChild(prebuiltScript);
+
+        function bootBabelFallback() {
+        var tw = document.createElement('script');
+        tw.src = 'https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4';
+        document.head.appendChild(tw);
+
+        fetch('./src/index.css')
+          .then(function (r) { return r.text(); })
+          .then(function (cssText) {
+            var cleanCss = cssText.replace(/@import\s+["']tailwindcss["'];?/g, '');
+            var styleEl = document.createElement('style');
+            styleEl.textContent = cleanCss;
+            document.head.appendChild(styleEl);
+          })
+          .catch(function () {});
+
+        var babelScript = document.createElement('script');
+        babelScript.src = 'https://unpkg.com/@babel/standalone@7.26.9/babel.min.js';
+        babelScript.onload = async function () {
+          var modulePromises = {};
+
+          function resolvePath(basePath, relPath) {
+            if (!relPath.startsWith('.')) return relPath;
+            var stack = basePath.split('/');
+            stack.pop();
+            var parts = relPath.split('/');
+            for (var i = 0; i < parts.length; i++) {
+              if (parts[i] === '.' || parts[i] === '') continue;
+              if (parts[i] === '..') stack.pop();
+              else stack.push(parts[i]);
+            }
+            return './' + stack.join('/');
+          }
+
+          function compileModule(modPath) {
+            if (modulePromises[modPath]) return modulePromises[modPath];
+
+            modulePromises[modPath] = (async function () {
+              if (modPath.endsWith('.css')) {
+                var emptyBlob = new Blob(['export default {};'], { type: 'application/javascript' });
+                return URL.createObjectURL(emptyBlob);
+              }
+
+              var res = await fetch(modPath);
+              if (!res.ok && !modPath.endsWith('.ts') && !modPath.endsWith('.tsx') && !modPath.endsWith('.json')) {
+                res = await fetch(modPath + '.tsx');
+                if (!res.ok) res = await fetch(modPath + '.ts');
+              }
+
+              if (modPath.endsWith('.json')) {
+                var jsonText = await res.text();
+                var jsonBlob = new Blob(['export default ' + jsonText + ';'], { type: 'application/javascript' });
+                return URL.createObjectURL(jsonBlob);
+              }
+
+              var code = await res.text();
+              code = code.replace(/import\s+type\s+[^;]+;/g, '');
+              code = code.replace(/import\.meta\.env\.BASE_URL/g, '"./"');
+              code = code.replace(/import\.meta\.env/g, '({ BASE_URL: "./" })');
+
+              var importRegex = /from\s+['"](\.[^'"]+)['"]|import\s+['"](\.[^'"]+)['"]/g;
+              var matches = [];
+              var m;
+              while ((m = importRegex.exec(code)) !== null) {
+                matches.push(m[1] || m[2]);
+              }
+
+              var resolvedMap = await Promise.all(
+                matches.map(async function (rawImp) {
+                  var resolved = resolvePath(modPath.replace(/^\.\//, ''), rawImp);
+                  var blobUrl = await compileModule(resolved);
+                  return { rawImp: rawImp, blobUrl: blobUrl };
+                })
+              );
+
+              for (var j = 0; j < resolvedMap.length; j++) {
+                var item = resolvedMap[j];
+                code = code.split("'" + item.rawImp + "'").join("'" + item.blobUrl + "'");
+                code = code.split('"' + item.rawImp + '"').join('"' + item.blobUrl + '"');
+              }
+
+              var transformed = window.Babel.transform(code, {
+                filename: modPath.endsWith('.ts') || modPath.endsWith('.tsx') ? modPath : modPath + '.tsx',
+                presets: [
+                  ['react', { runtime: 'automatic' }],
+                  ['typescript', { isTSX: true, allExtensions: true }]
+                ]
+              }).code;
+
+              var blob = new Blob([transformed], { type: 'application/javascript' });
+              return URL.createObjectURL(blob);
+            })();
+
+            return modulePromises[modPath];
+          }
+
+          try {
+            var entryUrl = await compileModule('./src/main.tsx');
+            await import(entryUrl);
+          } catch (err) {
+            console.error('Khojau static loader error:', err);
+          }
+        };
+        document.head.appendChild(babelScript);
+        }
+      })();
+    </script>
+  </body>
+</html>
