@@ -8,19 +8,22 @@ export const AboutModal: React.FC = () => {
 
   if (!isAboutOpen) return null;
 
+  const brandName = settings?.storeName || 'Khojau';
+  const nepaliName = settings?.websiteTexts?.topNepaliBrandText || 'खोजौँ';
+
   const founder = settings?.founder || {
     name: "Shishir Pokhrel",
-    role: "Founder & Owner of Liyau",
+    role: `Founder & Owner of ${brandName}`,
     photoUrl: "/src/assets/images/founder_shishir_1790996757613.jpg",
-    bio: "Hi, I'm Shishir Pokhrel. I started Liyau (लियौँ) right here in Butwal, Nepal because I wanted to build an honest, reliable Nepali online store where finding genuine products is straightforward and headache-free. Rather than overwhelming people with endless clutter and misleading discounts, I focus on handpicking real, dependable items—from authentic local Himalayan craftsmanship to verified electronics—and delivering them safely with verified digital payment and dedicated local care across Nepal.",
+    bio: "Hi, I'm Shishir Pokhrel. I started Khojau (खोजौँ) right here in Butwal, Nepal because I wanted to build an honest, reliable Nepali online store where finding genuine products is straightforward and headache-free. Rather than overwhelming people with endless clutter and misleading discounts, I focus on handpicking real, dependable items—from authentic local Himalayan craftsmanship to verified electronics—and delivering them safely with verified digital payment and dedicated local care across Nepal.",
     website: "https://shishirpokhrel.com.np"
   };
 
   const founderWebsite = founder.website || "https://shishirpokhrel.com.np";
 
   const aboutBrand = settings?.aboutBrand || {
-    aboutKhojau: "Liyau (लियौँ) is a modern Nepali online shopping brand based in Butwal, Nepal, created to make finding and ordering useful products simple and convenient. The goal is to bring interesting and useful products to customers through a clean, easy-to-use online shopping experience.",
-    brandDescription: "Based in Butwal, Nepal, Liyau is built on trust, transparency, and personal care. We inspect every product before it reaches your hands and provide dependable delivery throughout Butwal, Rupandehi, and all major cities in Nepal.",
+    aboutKhojau: "Khojau (खोजौँ) is a modern Nepali online shopping brand based in Butwal, Nepal, created to make finding and ordering useful products simple and convenient. The goal is to bring interesting and useful products to customers through a clean, easy-to-use online shopping experience.",
+    brandDescription: "Based in Butwal, Nepal, Khojau is built on trust, transparency, and personal care. We inspect every product before it reaches your hands and provide dependable delivery throughout Butwal, Rupandehi, and all major cities in Nepal.",
     mission: "To deliver genuinely useful products and authentic Nepali heritage crafts to homes across Nepal with unmatched reliability and friendly customer support."
   };
 
@@ -40,15 +43,15 @@ export const AboutModal: React.FC = () => {
             {settings?.logoUrl ? (
               <img
                 src={settings.logoUrl}
-                alt="Liyau (लियौँ)"
+                alt={`${brandName} (${nepaliName})`}
                 className="h-8 w-auto object-contain"
               />
             ) : (
-              <span className="text-xl font-black text-red-600 font-heading">लियौँ</span>
+              <span className="text-xl font-black text-red-600 font-heading">{nepaliName}</span>
             )}
             <span className="text-zinc-300">/</span>
             <h2 className="text-sm sm:text-base font-bold text-zinc-900 font-heading flex items-center gap-2">
-              <span>About Liyau & Founder</span>
+              <span>About {brandName} & Founder</span>
               <NepalFlag className="w-3.5 h-4" />
             </h2>
           </div>
@@ -64,7 +67,7 @@ export const AboutModal: React.FC = () => {
         {/* Scrollable Content */}
         <div className="overflow-y-auto p-6 sm:p-8 space-y-8 flex-1">
           
-          {/* Section 1: About Liyau */}
+          {/* Section 1: About Khojau */}
           <div className="space-y-4">
             <div className="inline-flex items-center gap-2 text-xs font-semibold text-red-700 tracking-wider uppercase">
               <span className="w-2 h-2 rounded-full bg-red-600"></span>
@@ -72,7 +75,7 @@ export const AboutModal: React.FC = () => {
             </div>
 
             <h3 className="text-2xl sm:text-3xl font-extrabold text-zinc-950 font-heading tracking-tight">
-              About Liyau (लियौँ)
+              About {brandName} ({nepaliName})
             </h3>
 
             <p className="text-sm sm:text-base text-zinc-700 leading-relaxed font-normal">
@@ -109,7 +112,7 @@ export const AboutModal: React.FC = () => {
           <div className="pt-8 border-t border-zinc-200 space-y-6">
             <div>
               <div className="inline-flex items-center gap-2 text-xs font-semibold text-zinc-500 tracking-wider uppercase mb-1">
-                <span>The Person Behind Liyau</span>
+                <span>The Person Behind {brandName}</span>
               </div>
               <h3 className="text-2xl font-bold text-zinc-950 font-heading">
                 About the Founder
@@ -136,12 +139,12 @@ export const AboutModal: React.FC = () => {
                     {founder.name || "Shishir Pokhrel"}
                   </h4>
                   <p className="text-xs font-semibold text-red-600">
-                    {founder.role || "Founder & Owner of Liyau"}
+                    {founder.role || `Founder & Owner of ${brandName}`}
                   </p>
                 </div>
 
                 <p className="text-xs sm:text-sm text-zinc-700 leading-relaxed font-normal whitespace-pre-line">
-                  {founder.bio || "Hi, I'm Shishir Pokhrel. I started Liyau right here in Butwal, Nepal because I wanted to build an honest, reliable Nepali online store where finding genuine products is straightforward and headache-free."}
+                  {founder.bio || "Hi, I'm Shishir Pokhrel. I started Khojau right here in Butwal, Nepal because I wanted to build an honest, reliable Nepali online store where finding genuine products is straightforward and headache-free."}
                 </p>
 
                 {/* Requirement 6: Read More About Shishir Pokhrel link to https://shishirpokhrel.com.np */}
@@ -166,7 +169,7 @@ export const AboutModal: React.FC = () => {
                   <span>·</span>
                   <span className="flex items-center gap-1">
                     <Mail className="w-3.5 h-3.5 text-zinc-400" />
-                    {settings?.contactEmail || 'support@liyau.com'}
+                    {settings?.contactEmail || 'support@khojau.com'}
                   </span>
                 </div>
               </div>

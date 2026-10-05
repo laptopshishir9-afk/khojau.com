@@ -12,8 +12,25 @@ export const resolveAssetUrl = (url?: string): string => {
   return `./${url}`;
 };
 
+export const OFFICIAL_KHOJAU_LOGO_DATA_URI =
+  `data:image/svg+xml;utf8,` +
+  encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" width="320" height="80" fill="none"><g><rect x="10" y="16" width="48" height="52" rx="10" fill="#DC2626"/><path d="M26 16V12C26 7.58172 29.5817 4 34 4C38.4183 4 42 7.58172 42 12V16" stroke="#DC2626" stroke-width="4.5" stroke-linecap="round"/><path d="M22 52L30 38L37 47L41 41L46 52H22Z" fill="white"/><circle cx="41" cy="30" r="3" fill="#FEE2E2"/><text x="68" y="52" font-family="'Plus Jakarta Sans', 'Mukta', 'Noto Sans Devanagari', system-ui, sans-serif" font-size="40" font-weight="900" fill="#18181B" letter-spacing="-0.5">खोजौँ</text><circle cx="168" cy="48" r="4.5" fill="#DC2626"/><text x="70" y="66" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="9" font-weight="800" fill="#71717A" letter-spacing="3.5">KHOJAU NEPAL</text></g></svg>`
+  );
+
+export const CLEAN_KHOJAU_HERO_PATH = '/src/assets/images/khojau_hero_butwal_clean_1791096130543.jpg';
+
 export const sanitizeBrandString = (val?: string): string => {
   if (!val || typeof val !== 'string') return val || '';
+  if (/liyau.*logo|leyau.*logo|khojau_logo\.svg/i.test(val)) {
+    return OFFICIAL_KHOJAU_LOGO_DATA_URI;
+  }
+  if (val.includes('khojau_hero_nepal_1791032655932')) {
+    return CLEAN_KHOJAU_HERO_PATH;
+  }
+  if (val.startsWith('data:image') && /liyau|लियौँ|लिऔँ/i.test(val)) {
+    return OFFICIAL_KHOJAU_LOGO_DATA_URI;
+  }
   return val
     .replace(/liyau_logo\.svg/gi, 'khojau_logo.svg')
     .replace(/leyau_logo\.svg/gi, 'khojau_logo.svg')
@@ -43,13 +60,25 @@ export const normalizeStoreSettings = (s: StoreSettings): StoreSettings => {
     cleanTexts[k] = sanitizeBrandString(v as string);
   }
 
+  const rawLogo = sanitizeBrandString(s.logoUrl);
+  const finalLogo =
+    !rawLogo || rawLogo.includes('khojau_logo.svg') || rawLogo.includes('liyau')
+      ? OFFICIAL_KHOJAU_LOGO_DATA_URI
+      : resolveAssetUrl(rawLogo);
+
+  const rawHero = sanitizeBrandString(s.heroBannerUrl);
+  const finalHero =
+    !rawHero || rawHero.includes('1791032655932')
+      ? resolveAssetUrl(CLEAN_KHOJAU_HERO_PATH)
+      : resolveAssetUrl(rawHero);
+
   return {
     ...(rawStoreData.settings as unknown as StoreSettings),
     ...s,
     storeName: sanitizeBrandString(s.storeName || 'Khojau'),
     tagline: sanitizeBrandString(s.tagline || rawStoreData.settings.tagline),
-    logoUrl: resolveAssetUrl(sanitizeBrandString(s.logoUrl) || '/src/assets/images/khojau_logo.svg'),
-    faviconUrl: resolveAssetUrl(sanitizeBrandString(s.faviconUrl) || s.logoUrl || '/src/assets/images/khojau_logo.svg'),
+    logoUrl: finalLogo,
+    faviconUrl: s.faviconUrl ? resolveAssetUrl(sanitizeBrandString(s.faviconUrl)) : finalLogo,
     customCategories: Array.isArray(s.customCategories) && s.customCategories.length > 0
       ? s.customCategories
       : [
@@ -61,7 +90,7 @@ export const normalizeStoreSettings = (s: StoreSettings): StoreSettings => {
           'Groceries & Tea',
           'Accessories',
         ],
-    heroBannerUrl: resolveAssetUrl(s.heroBannerUrl || '/src/assets/images/khojau_hero_nepal_1791032655932.jpg'),
+    heroBannerUrl: finalHero,
     promoBannerUrl: resolveAssetUrl(s.promoBannerUrl || '/src/assets/images/banner_tech_lifestyle_1790995930360.jpg'),
     nepalFlagUrl: resolveAssetUrl(s.nepalFlagUrl),
     heroTitle: sanitizeBrandString(s.heroTitle),
@@ -135,7 +164,7 @@ export interface LocalStoreDB {
   adminCredentials?: LocalAdminCredentials;
 }
 
-const LOCAL_DB_KEY = 'khojau_static_store_db_v3';
+const LOCAL_DB_KEY = 'khojau_static_store_db_v4';
 
 export function normalizeFullStoreDB(parsed: Partial<LocalStoreDB>): LocalStoreDB {
   return {
@@ -159,10 +188,16 @@ export function normalizeFullStoreDB(parsed: Partial<LocalStoreDB>): LocalStoreD
 
 export function getLocalStoreDB(): LocalStoreDB {
   try {
-    // Purge any legacy v1/v2 or liyau/leyau keys that may hold old cached settings on other devices
+    // Purge any legacy v1/v2/v3 or liyau/leyau keys that may hold old cached settings on other devices
     for (let i = localStorage.length - 1; i >= 0; i--) {
       const k = localStorage.key(i);
-      if (k && (k === 'khojau_static_store_db_v1' || k === 'khojau_static_store_db_v2' || /liyau|leyau/i.test(k))) {
+      if (
+        k &&
+        (k === 'khojau_static_store_db_v1' ||
+          k === 'khojau_static_store_db_v2' ||
+          k === 'khojau_static_store_db_v3' ||
+          /liyau|leyau/i.test(k))
+      ) {
         localStorage.removeItem(k);
       }
     }

@@ -29,10 +29,13 @@ jobs:
       - name: Install dependencies and build Vite production site
         run: |
           npm install --no-audit --no-fund
-          npx vite build
+          npm run build
           cp dist/index.html dist/404.html
           cp -r src dist/src || true
           cp -r data dist/data || true
+          if [ -f src/assets/images/khojau_logo.svg ]; then
+            cp src/assets/images/khojau_logo.svg dist/assets/app-bundle.svg || true
+          fi
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

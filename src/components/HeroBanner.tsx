@@ -2,13 +2,13 @@ import React from 'react';
 import { ArrowRight, Truck, RefreshCw, Sparkles, CreditCard } from 'lucide-react';
 import { useStore } from '../context/StoreContext.tsx';
 import { NepalFlag } from './NepalFlag.tsx';
-import { resolveAssetUrl } from '../services/fallbackStore.ts';
+import { resolveAssetUrl, OFFICIAL_KHOJAU_LOGO_DATA_URI, CLEAN_KHOJAU_HERO_PATH } from '../services/fallbackStore.ts';
 
 export const HeroBanner: React.FC = () => {
   const { setIsAiAssistantOpen, settings } = useStore();
 
-  const currentLogo = resolveAssetUrl(settings?.logoUrl || '/src/assets/images/liyau_logo.svg');
-  const heroBgUrl = resolveAssetUrl(settings?.heroBannerUrl || '/src/assets/images/khojau_hero_nepal_1791032655932.jpg');
+  const currentLogo = settings?.logoUrl ? resolveAssetUrl(settings.logoUrl) : OFFICIAL_KHOJAU_LOGO_DATA_URI;
+  const heroBgUrl = resolveAssetUrl(settings?.heroBannerUrl || CLEAN_KHOJAU_HERO_PATH);
 
   return (
     <section className="relative overflow-hidden bg-zinc-950 border-b border-zinc-800 text-white w-full">
@@ -16,7 +16,7 @@ export const HeroBanner: React.FC = () => {
       <div className="hidden sm:block absolute inset-0 z-0">
         <img
           src={heroBgUrl}
-          alt="Liyau Nepali shopping lifestyle campaign in Butwal, Nepal"
+          alt="Khojau Nepali shopping lifestyle campaign in Butwal, Nepal"
           referrerPolicy="no-referrer"
           className="w-full h-full object-cover object-center"
         />
@@ -28,18 +28,18 @@ export const HeroBanner: React.FC = () => {
       <div className="sm:hidden relative w-full aspect-16/10 bg-zinc-900 overflow-hidden">
         <img
           src={heroBgUrl}
-          alt="Liyau authentic products in Butwal, Nepal"
+          alt="Khojau authentic products in Butwal, Nepal"
           referrerPolicy="no-referrer"
           className="w-full h-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/35 to-black/30" />
-        {/* Mobile Positioned Liyau Logo in Top-Right Corner of Banner */}
+        {/* Mobile Positioned Khojau Logo in Top-Right Corner of Banner */}
         <div className="absolute top-3 right-3 bg-zinc-950/75 backdrop-blur-xs border border-white/15 rounded-xl px-2.5 py-1.5 flex items-center gap-1.5">
           <img
             src={currentLogo}
-            alt="Liyau (लियौँ)"
+            alt="Khojau"
             referrerPolicy="no-referrer"
-            className="h-5 w-auto max-w-[95px] object-contain brightness-0 invert"
+            className="h-5 w-auto max-w-[80px] object-contain brightness-0 invert"
           />
         </div>
       </div>
@@ -48,7 +48,7 @@ export const HeroBanner: React.FC = () => {
       <div className="hidden sm:flex absolute inset-y-0 right-6 z-1 items-center justify-end pointer-events-none select-none overflow-hidden">
         <img
           src={currentLogo}
-          alt="Liyau Brand Watermark"
+          alt="Khojau Brand Watermark"
           referrerPolicy="no-referrer"
           className="w-[340px] md:w-[460px] lg:w-[540px] h-auto object-contain opacity-10 brightness-0 invert"
         />
@@ -96,7 +96,7 @@ export const HeroBanner: React.FC = () => {
                 className="px-4 sm:px-5 py-2.5 sm:py-3 bg-white/10 hover:bg-white/20 active:scale-98 text-white text-xs sm:text-sm font-semibold rounded-xl border border-white/20 backdrop-blur-md transition-colors inline-flex items-center justify-center gap-2 cursor-pointer min-h-[42px]"
               >
                 <Sparkles className="w-4 h-4 text-red-400 shrink-0" />
-                <span>{settings?.websiteTexts?.heroSecondaryButtonText || `Ask ${settings?.aiSettings?.assistantName || 'Liyau Thinker'}`}</span>
+                <span>{settings?.websiteTexts?.heroSecondaryButtonText || `Ask ${settings?.aiSettings?.assistantName || 'Khojau Saathi'}`}</span>
               </button>
             )}
           </div>

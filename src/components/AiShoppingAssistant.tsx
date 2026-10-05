@@ -28,14 +28,15 @@ export const AiShoppingAssistant: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const assistantName = settings?.aiSettings?.assistantName || 'Liyau Thinker';
+  const assistantName = settings?.aiSettings?.assistantName || 'Khojau Saathi';
+  const brandName = settings?.storeName || 'Khojau';
+  const nepaliName = settings?.websiteTexts?.topNepaliBrandText || 'खोजौँ';
 
   // Initialize with greeting
   useEffect(() => {
     const defaultGreeting =
-      settings?.aiSettings?.greetingMessage ||
       settings?.aiSettings?.welcomeMessage ||
-      'Namaste! 🙏 I am Liyau Thinker, your official AI shopping assistant for Liyau (लियौँ) in Butwal, Nepal. Ask me about our live products, prices, QR payment, or delivery across Nepal!';
+      `Namaste! 🙏 I am ${assistantName}, your official AI shopping assistant for ${brandName} (${nepaliName}) in Butwal, Nepal. Ask me about our live products, prices, QR payment, or delivery across Nepal!`;
 
     if (messages.length === 0) {
       setMessages([
@@ -47,7 +48,7 @@ export const AiShoppingAssistant: React.FC = () => {
         }
       ]);
     }
-  }, [settings, messages.length]);
+  }, [settings, messages.length, assistantName, brandName, nepaliName]);
 
   // Handle incoming initial prompt
   useEffect(() => {
@@ -109,7 +110,7 @@ export const AiShoppingAssistant: React.FC = () => {
         {
           id: `ai-err-${Date.now()}`,
           sender: 'ai',
-          text: 'Namaste! 🙏 I am experiencing a brief connection hiccup. Liyau (लियौँ) is based in Butwal, Nepal and you can explore our catalog or contact our Butwal team directly.',
+          text: `Namaste! 🙏 I am experiencing a brief connection hiccup. ${brandName} (${nepaliName}) is based in Butwal, Nepal and you can explore our catalog or contact our Butwal team directly.`,
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         }
       ]);
@@ -121,10 +122,10 @@ export const AiShoppingAssistant: React.FC = () => {
   const samplePrompts = settings?.aiSettings?.suggestedQuestions?.length
     ? settings.aiSettings.suggestedQuestions
     : [
-        'Where is Liyau located in Nepal?',
-        'How does QR payment work on Liyau?',
+        `Where is ${brandName} located in Nepal?`,
+        `How does QR payment work on ${brandName}?`,
         'What are the delivery charges from Butwal?',
-        'Who is the founder of Liyau?'
+        `Who is the founder of ${brandName}?`
       ];
 
   if (settings?.aiSettings?.enabled === false) return null;
@@ -136,7 +137,7 @@ export const AiShoppingAssistant: React.FC = () => {
         <button
           onClick={() => setIsAiAssistantOpen(true)}
           className="fixed bottom-6 right-6 z-40 bg-red-600 hover:bg-red-700 text-white p-3.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 group active:scale-95"
-          aria-label="Open Liyau Thinker AI Shopping Assistant"
+          aria-label={`Open ${assistantName} AI Shopping Assistant`}
         >
           <Sparkles className="w-5 h-5 text-red-200 group-hover:rotate-12 transition-transform" />
           <span className="text-xs font-bold pr-1 hidden sm:inline">{assistantName}</span>
@@ -158,7 +159,7 @@ export const AiShoppingAssistant: React.FC = () => {
                   <h3 className="text-xs font-bold font-heading">{assistantName}</h3>
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
                 </div>
-                <p className="text-[10px] text-zinc-400">Grounded on Liyau (लियौँ) Store Catalog</p>
+                <p className="text-[10px] text-zinc-400">Grounded on {brandName} ({nepaliName}) Store Catalog</p>
               </div>
             </div>
 

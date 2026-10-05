@@ -40,7 +40,7 @@ const INITIAL_SETTINGS: StoreSettings = {
   storeName: "Khojau",
   tagline: "Nepal's Trusted Modern Online Store",
   logoUrl: "/src/assets/images/khojau_logo.svg",
-  heroBannerUrl: "/src/assets/images/khojau_hero_nepal_1791032655932.jpg",
+  heroBannerUrl: "/src/assets/images/khojau_hero_butwal_clean_1791096130543.jpg",
   promoBannerUrl: "/src/assets/images/banner_tech_lifestyle_1790995930360.jpg",
   nepalFlagUrl: "",
   heroBadgeText: "Authentic Nepali Store",
@@ -246,6 +246,7 @@ function loadDB(): StoreDB {
   if (fs.existsSync(DB_FILE)) {
     try {
       const cleanedRaw = fs.readFileSync(DB_FILE, 'utf-8')
+        .replace(/khojau_hero_nepal_1791032655932\.jpg/g, 'khojau_hero_butwal_clean_1791096130543.jpg')
         .replace(/liyau_logo\.svg/gi, 'khojau_logo.svg')
         .replace(/Liyau/g, 'Khojau')
         .replace(/liyau/g, 'khojau')

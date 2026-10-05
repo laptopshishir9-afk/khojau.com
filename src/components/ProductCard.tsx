@@ -97,10 +97,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           type="button"
           onClick={handleAskAi}
           className="hidden sm:flex absolute bottom-2.5 right-2.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-white/90 hover:bg-white text-zinc-800 text-[11px] font-semibold px-2 py-1 rounded shadow-xs items-center gap-1 cursor-pointer"
-          title="Ask Liyau Thinker about this item"
+          title="Ask Khojau Saathi about this item"
         >
           <Sparkles className="w-3 h-3 text-red-600" />
-          <span>Ask Liyau Thinker</span>
+          <span>Ask Khojau Saathi</span>
         </button>
       </div>
 

@@ -1,18 +1,18 @@
 {
   "settings": {
-    "storeName": "Liyau",
+    "storeName": "Khojau",
     "tagline": "Nepal's Trusted Modern Online Store",
-    "logoUrl": "/src/assets/images/liyau_logo.svg",
-    "heroBannerUrl": "/src/assets/images/khojau_hero_nepal_1791032655932.jpg",
+    "logoUrl": "/src/assets/images/khojau_logo.svg",
+    "heroBannerUrl": "/src/assets/images/khojau_hero_butwal_clean_1791096130543.jpg",
     "promoBannerUrl": "/src/assets/images/banner_tech_lifestyle_1790995930360.jpg",
     "nepalFlagUrl": "",
     "heroBadgeText": "Authentic Nepali Store",
     "heroTitle": "Genuine Products & Nepali Craftsmanship, Delivered Across Nepal.",
     "heroSubtitle": "Handpicked everyday essentials, pure Himalayan cashmere, organic mountain teas, and verified electronics dispatched directly from our Butwal, Nepal hub with verified QR payment.",
     "contactPhone": "+977-9801234567",
-    "contactEmail": "support@liyau.com",
+    "contactEmail": "support@khojau.com",
     "storeAddress": "Traffic Chowk, Butwal, Nepal",
-    "announcementText": "🇳🇵 लियौँ — Butwal, Nepal | Fast Nationwide Delivery Across All 7 Provinces",
+    "announcementText": "🇳🇵 खोजौँ — Butwal, Nepal | Fast Nationwide Delivery Across All 7 Provinces",
     "announcementActive": true,
     "deliveryKathmanduFee": 50,
     "deliveryOutsideFee": 150,
@@ -27,14 +27,14 @@
     },
     "aiSettings": {
       "enabled": true,
-      "assistantName": "Liyau Thinker",
-      "welcomeMessage": "Namaste! 🙏 I am Liyau Thinker, your shopping assistant for Liyau (लियौँ) in Butwal, Nepal. How can I help you today?",
+      "assistantName": "Khojau Saathi",
+      "welcomeMessage": "Namaste! 🙏 I am Khojau Saathi, your shopping assistant for Khojau in Butwal, Nepal. How can I help you today?",
       "tone": "Friendly, helpful, honest, and culturally respectful Nepali shopping guide",
-      "storeBio": "Liyau (लियौँ) is an authentic Nepali online shopping store based in Butwal, Nepal, founded by Shishir Pokhrel in Butwal, Nepal. We connect customers across Nepal with genuine products, local craftsmanship, and verified electronics with secure QR digital payments.",
+      "storeBio": "Khojau (खोजौँ) is an authentic Nepali online shopping store based in Butwal, Nepal, founded by Shishir Pokhrel in Butwal, Nepal. We connect customers across Nepal with genuine products, local craftsmanship, and verified electronics with secure QR digital payments.",
       "faqList": [
         {
-          "question": "Where is Liyau store located?",
-          "answer": "Liyau is proudly based in Butwal, Nepal. Our main office and fulfillment hub is located in Butwal, Nepal, and we deliver nationwide across all provinces of Nepal."
+          "question": "Where is Khojau store located?",
+          "answer": "Khojau is proudly based in Butwal, Nepal. Our main office and fulfillment hub is located in Butwal, Nepal, and we deliver nationwide across all provinces of Nepal."
         },
         {
           "question": "How do I make payment?",
@@ -50,23 +50,23 @@
         }
       ],
       "suggestedQuestions": [
-        "Where is Liyau located in Nepal?",
-        "How does QR payment work on Liyau?",
+        "Where is Khojau located in Nepal?",
+        "How does QR payment work on Khojau?",
         "What are the delivery charges from Butwal?",
-        "Who is the founder of Liyau?"
+        "Who is the founder of Khojau?"
       ],
-      "customInstructions": "CRITICAL: Liyau is strictly based in Butwal, Nepal. Always state Butwal, Nepal whenever business location is asked or relevant. Never say Liyau is based in Kathmandu. Answer questions using only the actual current website and database information (products, prices, discounts, offers, orders, QR payment, Butwal location, contact details, delivery info, return policy, About Liyau, and Founder Shishir Pokhrel). Never invent products, prices, stock, or policies."
+      "customInstructions": "CRITICAL: Khojau is strictly based in Butwal, Nepal. Always state Butwal, Nepal whenever business location is asked or relevant. Never say Khojau is based in Kathmandu. Answer questions using only the actual current website and database information (products, prices, discounts, offers, orders, QR payment, Butwal location, contact details, delivery info, return policy, About Khojau, and Founder Shishir Pokhrel). Never invent products, prices, stock, or policies."
     },
     "founder": {
       "name": "Shishir Pokhrel",
-      "role": "Founder & Owner of Liyau",
+      "role": "Founder & Owner of Khojau",
       "photoUrl": "/src/assets/images/founder_shishir_1790996757613.jpg",
-      "bio": "Hi, I'm Shishir Pokhrel. I started Liyau right here in Butwal, Nepal because I wanted to build an honest, reliable Nepali online store where finding genuine products is straightforward and headache-free. Rather than overwhelming people with endless clutter and fake discounts, I focus on handpicking real, dependable items and delivering them safely across Nepal with verified QR digital payment and dedicated local care.",
+      "bio": "Hi, I'm Shishir Pokhrel. I started Khojau right here in Butwal, Nepal because I wanted to build an honest, reliable Nepali online store where finding genuine products is straightforward and headache-free. Rather than overwhelming people with endless clutter and fake discounts, I focus on handpicking real, dependable items and delivering them safely across Nepal with verified QR digital payment and dedicated local care.",
       "website": "https://shishirpokhrel.com.np"
     },
     "aboutBrand": {
-      "aboutKhojau": "Liyau (लियौँ) is a modern Nepali online shopping brand based in Butwal, Nepal, created to make finding and ordering useful products simple and convenient. The goal is to bring interesting and useful products to customers through a clean, easy-to-use online shopping experience.",
-      "brandDescription": "Based in Butwal, Nepal, Liyau is built on trust, transparency, and personal care. We inspect every product at our Butwal hub before it reaches your hands and provide dependable delivery throughout Butwal, Rupandehi, and all major cities across Nepal.",
+      "aboutKhojau": "Khojau (खोजौँ) is a modern Nepali online shopping brand based in Butwal, Nepal, created to make finding and ordering useful products simple and convenient. The goal is to bring interesting and useful products to customers through a clean, easy-to-use online shopping experience.",
+      "brandDescription": "Based in Butwal, Nepal, Khojau is built on trust, transparency, and personal care. We inspect every product at our Butwal hub before it reaches your hands and provide dependable delivery throughout Butwal, Rupandehi, and all major cities across Nepal.",
       "mission": "To deliver genuinely useful products and authentic Nepali heritage crafts from Butwal, Nepal to homes across the nation with unmatched reliability and friendly customer support."
     },
     "promotionalOffer": {
@@ -81,25 +81,25 @@
       "enabled": true,
       "qrImageUrl": "",
       "providerName": "eSewa / Fonepay / Khalti / Mobile Banking",
-      "accountName": "Liyau Online Store",
+      "accountName": "Khojau Online Store",
       "accountNumber": "9801234567",
       "instructions": "तलको QR स्क्यान गरेर भुक्तानी गर्नुहोस्। भुक्तानी गरेपछि Transaction ID राख्नुहोस्।"
     },
     "websiteTexts": {
-      "topNepaliBrandText": "लियौँ",
+      "topNepaliBrandText": "खोजौँ",
       "topLocationText": "Butwal, Nepal",
       "topRightBadgeText": "नेपालभर डेलिभरी",
-      "searchPlaceholder": "Search products in Liyau...",
-      "askAiButtonText": "Liyau Thinker",
+      "searchPlaceholder": "Search products in Khojau...",
+      "askAiButtonText": "Ask Saathi",
       "heroPrimaryButtonText": "Browse Catalog",
-      "heroSecondaryButtonText": "Ask Liyau Thinker",
+      "heroSecondaryButtonText": "Ask Khojau Saathi",
       "heroTrust1Title": "Fast Shipping",
       "heroTrust1Sub": "From Butwal, Nepal",
       "heroTrust2Title": "QR Payment",
       "heroTrust2Sub": "eSewa · Khalti · Banking",
       "heroTrust3Title": "7-Day Return",
       "heroTrust3Sub": "Easy replacement",
-      "heroCardBadge": "Liyau Verified Store",
+      "heroCardBadge": "Khojau Verified Store",
       "heroCardBox1Title": "Verified QR Payment",
       "heroCardBox1Desc": "Scan to pay with eSewa, Khalti, or any Nepali Mobile Banking app. Order verification is fast and transparent.",
       "heroCardBox2Title": "Nationwide Delivery from Butwal, Nepal",
@@ -112,7 +112,7 @@
       "promoSectionSubtitle": "Every order is hand-checked at our Butwal, Nepal hub before dispatch. Enjoy verified QR digital payments, prompt replacement warranty, and dedicated customer support.",
       "promoPrimaryButton": "Explore Electronics",
       "promoSecondaryButton": "Explore Handicrafts",
-      "testimonialsHeading": "What Customers Say About Liyau",
+      "testimonialsHeading": "What Customers Say About Khojau",
       "testimonialsSubheading": "Verified reviews from satisfied shoppers across Butwal, Bhairahawa, Pokhara, and beyond.",
       "testimonialsRatingBadge": "4.9 / 5.0 Customer Rating",
       "testimonial1Name": "Sushila Shrestha",
@@ -151,11 +151,11 @@
   "orders": [],
   "customers": [],
   "adminCredentials": {
-    "email": "admin@liyau.com",
+    "email": "admin@khojau.com",
     "username": "admin",
     "passwordHash": "2ed5d2049dfb257577e1f7ff88c0812160f64f3b0e52bf107cf3c192dfa854215a57e70f2f0d0f20bc51d6dbafd7b5943dfbaae428707f8e1fc6de3c3a02fe5d",
     "salt": "a1b2c3d4e5f607182930415263748596",
     "isConfigured": true,
-    "updatedAt": "2026-10-04T03:00:00.000Z"
+    "updatedAt": "2026-10-03T13:21:15.024Z"
   }
 }

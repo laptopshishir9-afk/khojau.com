@@ -66,13 +66,13 @@ export const Footer: React.FC = () => {
             {settings?.logoUrl ? (
               <img
                 src={settings.logoUrl}
-                alt={settings.storeName || 'Liyau (लियौँ)'}
+                alt={settings.storeName || 'Khojau (खोजौँ)'}
                 className="h-9 w-auto max-w-[165px] object-contain brightness-0 invert opacity-95"
               />
             ) : (
               <div className="flex items-baseline gap-1 text-xl font-bold tracking-tight text-white font-heading">
-                <span>{settings?.storeName || 'Liyau'}</span>
-                <span className="text-red-500 font-black ml-1">लियौँ</span>
+                <span>{settings?.storeName || 'Khojau'}</span>
+                <span className="text-red-500 font-black ml-1">{settings?.websiteTexts?.topNepaliBrandText || 'खोजौँ'}</span>
               </div>
             )}
             <p className="text-zinc-400 leading-relaxed text-xs">
@@ -83,7 +83,7 @@ export const Footer: React.FC = () => {
                 onClick={() => setIsAboutOpen(true)}
                 className="text-xs text-red-400 hover:text-red-300 font-semibold inline-flex items-center gap-1 transition-colors underline cursor-pointer"
               >
-                <span>Read More About Liyau & Founder →</span>
+                <span>Read More About {settings?.storeName || 'Khojau'} & Founder →</span>
               </button>
             </div>
             <div className="space-y-2 text-zinc-400">
@@ -97,7 +97,7 @@ export const Footer: React.FC = () => {
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-red-500 shrink-0" />
-                <span className="break-all">{settings?.contactEmail || 'support@liyau.com'}</span>
+                <span className="break-all">{settings?.contactEmail || 'support@khojau.com'}</span>
               </div>
             </div>
           </div>
@@ -170,7 +170,7 @@ export const Footer: React.FC = () => {
                   onClick={() => setIsAboutOpen(true)}
                   className="hover:text-white transition-colors cursor-pointer"
                 >
-                  About Liyau & Founder
+                  About {settings?.storeName || 'Khojau'} & Founder
                 </button>
               </li>
             </ul>
@@ -201,7 +201,7 @@ export const Footer: React.FC = () => {
         <div className="pt-6 mt-8 border-t border-zinc-800/90 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-[11px] text-zinc-500">
           <div className="flex items-center gap-2 flex-wrap">
             <p>
-              © {new Date().getFullYear()} {settings?.storeName || 'Liyau'} (लियौँ) — {settings?.websiteTexts?.footerCopyrightText || 'Butwal, Nepal. All rights reserved.'}
+              © {new Date().getFullYear()} {settings?.storeName || 'Khojau'} ({settings?.websiteTexts?.topNepaliBrandText || 'खोजौँ'}) — {settings?.websiteTexts?.footerCopyrightText || 'Butwal, Nepal. All rights reserved.'}
             </p>
             <span aria-hidden="true">·</span>
             <button

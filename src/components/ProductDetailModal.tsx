@@ -140,15 +140,15 @@ export const ProductDetailModal: React.FC = () => {
                 <div className="text-xs">
                   <p className="font-semibold text-zinc-900">Have questions about this item?</p>
                   <p className="text-zinc-600 mt-0.5">
-                    Ask Liyau Thinker about specifications, sizing, genuine material verification, or delivery timeline.
+                    Ask {settings?.aiSettings?.assistantName || 'Khojau Saathi'} about specifications, sizing, genuine material verification, or delivery timeline.
                   </p>
                   <button
                     onClick={() => {
-                      openAiWithPrompt(`Is the ${selectedProduct.name} authentic? Tell me more about its material and how it compares with other items in Liyau.`, selectedProduct);
+                      openAiWithPrompt(`Is the ${selectedProduct.name} authentic? Tell me more about its material and how it compares with other items in ${settings?.storeName || 'Khojau'}.`, selectedProduct);
                     }}
                     className="mt-2 text-red-700 font-bold hover:underline inline-flex items-center gap-1"
                   >
-                    <span>Ask Liyau Thinker Now</span>
+                    <span>Ask {settings?.aiSettings?.assistantName || 'Khojau Saathi'} Now</span>
                     <Sparkles className="w-3 h-3 text-red-600" />
                   </button>
                 </div>

@@ -74,7 +74,7 @@ export const CheckoutModal: React.FC = () => {
   const payableTotal = cartSubtotal + deliveryFee;
 
   // Preliminary items summary for payment remark before order creation
-  const primaryItemName = cart[0]?.product.name || 'Liyau Order';
+  const primaryItemName = cart[0]?.product.name || 'Khojau Order';
   const preliminarySummary = cart.length > 1 ? `${primaryItemName} (+${cart.length - 1} more)` : primaryItemName;
 
   const copyToClipboard = (text: string, field: 'amount' | 'remark' | 'account') => {
@@ -215,14 +215,14 @@ export const CheckoutModal: React.FC = () => {
     enabled: true,
     qrImageUrl: '',
     providerName: 'eSewa / Fonepay / Khalti / Mobile Banking',
-    accountName: 'Liyau Online Store',
+    accountName: 'Khojau Online Store',
     accountNumber: '9801234567',
     instructions: 'तलको QR स्क्यान गरेर भुक्तानी गर्नुहोस्। भुक्तानी गरेपछि Transaction ID राख्नुहोस्।'
   };
 
-  const activeOrderNumber = createdOrder?.orderNumber || 'LY-1025';
+  const activeOrderNumber = createdOrder?.orderNumber || 'KHJ-1025';
   const officialOrderAmount = createdOrder ? createdOrder.total : payableTotal;
-  const officialRemark = createdOrder?.paymentRemark || `Liyau Order #${activeOrderNumber} — ${preliminarySummary}`;
+  const officialRemark = createdOrder?.paymentRemark || `Khojau Order #${activeOrderNumber} — ${preliminarySummary}`;
   const shortRemark = activeOrderNumber;
 
   return (
@@ -285,7 +285,7 @@ export const CheckoutModal: React.FC = () => {
                       <div key={item.productId} className="py-2 flex items-center justify-between gap-3 text-xs">
                         <div className="flex items-center gap-2.5 truncate">
                           <img
-                            src={item.product.images?.[0] || '/src/assets/images/liyau_logo.svg'}
+                            src={item.product.images?.[0] || '/src/assets/images/khojau_logo.svg'}
                             alt={item.product.name}
                             className="w-9 h-9 rounded object-cover border border-zinc-200 shrink-0 bg-white"
                           />
@@ -455,7 +455,7 @@ export const CheckoutModal: React.FC = () => {
                   {qrSettings.qrImageUrl ? (
                     <img
                       src={qrSettings.qrImageUrl}
-                      alt="Liyau Payment QR Code"
+                      alt="Khojau Payment QR Code"
                       referrerPolicy="no-referrer"
                       className="w-full h-full object-contain"
                     />

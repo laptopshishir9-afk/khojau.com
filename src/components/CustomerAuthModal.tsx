@@ -72,7 +72,6 @@ export const CustomerAuthModal: React.FC = () => {
       // Allow admin credentials (username "admin" or admin email) to log in directly from here too
       if (
         trimmedIdentifier.toLowerCase() === 'admin' ||
-        trimmedIdentifier.toLowerCase() === 'admin@liyau.com' ||
         trimmedIdentifier.toLowerCase() === 'admin@khojau.com'
       ) {
         try {
@@ -129,7 +128,7 @@ export const CustomerAuthModal: React.FC = () => {
             <User className="w-5 h-5 text-red-600" />
             <h2 className="text-base font-bold text-zinc-900 font-heading">
               {currentUser
-                ? 'My Liyau Account'
+                ? 'My Khojau Account'
                 : authMode === 'login'
                 ? 'Customer Login'
                 : 'Create Customer Account'}

@@ -2315,7 +2315,7 @@ export const AdminDashboard: React.FC = () => {
                           onClick={() => {
                             setStoreSettingsForm({
                               ...storeSettingsForm,
-                              heroBannerUrl: '/src/assets/images/khojau_hero_nepal_1791032655932.jpg'
+                              heroBannerUrl: '/src/assets/images/khojau_hero_butwal_clean_1791096130543.jpg'
                             });
                             showToast('Reverted to official Khojau campaign photo. Click Save to apply.');
                           }}

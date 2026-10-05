@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" width="320" height="80" fill="none">
+  <!-- Official Khojau (खोजौँ) Nepali E-commerce Logo -->
+  <g>
+    <!-- Brand Icon: Modern Shopping Bag with Nepali Mountain Accent -->
+    <rect x="10" y="16" width="48" height="52" rx="10" fill="#DC2626"/>
+    <path d="M26 16V12C26 7.58172 29.5817 4 34 4C38.4183 4 42 7.58172 42 12V16" stroke="#DC2626" stroke-width="4.5" stroke-linecap="round"/>
+    <!-- Modern Mountain Peak in Bag Cutout -->
+    <path d="M22 52L30 38L37 47L41 41L46 52H22Z" fill="white"/>
+    <circle cx="41" cy="30" r="3" fill="#FEE2E2"/>
+    
+    <!-- Devanagari Main Wordmark: खोजौँ -->
+    <text x="68" y="52" font-family="'Plus Jakarta Sans', 'Mukta', 'Noto Sans Devanagari', system-ui, sans-serif" font-size="40" font-weight="900" fill="#18181B" letter-spacing="-0.5">
+      खोजौँ
+    </text>
+    <circle cx="168" cy="48" r="4.5" fill="#DC2626"/>
+
+    <!-- English Subtitle & Tagline -->
+    <text x="70" y="66" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="9" font-weight="800" fill="#71717A" letter-spacing="3.5">
+      KHOJAU NEPAL
+    </text>
+  </g>
+</svg>
