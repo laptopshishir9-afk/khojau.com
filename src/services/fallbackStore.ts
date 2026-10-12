@@ -116,8 +116,32 @@ export const normalizeStoreSettings = (s: StoreSettings): StoreSettings => {
       ? {
           ...s.aiSettings,
           assistantName: sanitizeBrandString(s.aiSettings.assistantName || 'Khojau Saathi'),
-          welcomeMessage: sanitizeBrandString(s.aiSettings.welcomeMessage),
-          customPrompt: sanitizeBrandString(s.aiSettings.customPrompt),
+          welcomeMessage:
+            !s.aiSettings.welcomeMessage ||
+            /your shopping assistant for Khojau in Butwal|official AI shopping assistant/i.test(
+              s.aiSettings.welcomeMessage
+            )
+              ? 'Namaste! 🙏 Welcome to Khojau (खोजौँ). I am Khojau Saathi, your shopping assistant. How can I help you today?'
+              : sanitizeBrandString(s.aiSettings.welcomeMessage),
+          customInstructions: sanitizeBrandString(s.aiSettings.customInstructions),
+          suggestedQuestions:
+            Array.isArray(s.aiSettings.suggestedQuestions) &&
+            s.aiSettings.suggestedQuestions.length > 0 &&
+            !s.aiSettings.suggestedQuestions.some((q) => /located in Nepal\?|How does QR payment work/i.test(q))
+              ? s.aiSettings.suggestedQuestions.map((q) => sanitizeBrandString(q))
+              : [
+                  'Where is Khojau located?',
+                  'What products are available on Khojau?',
+                  'How does payment work on Khojau?',
+                  'How can I track my order?',
+                  'How can I contact Khojau?',
+                ],
+          faqList: Array.isArray(s.aiSettings.faqList)
+            ? s.aiSettings.faqList.map((f) => ({
+                question: sanitizeBrandString(f.question),
+                answer: sanitizeBrandString(f.answer),
+              }))
+            : [],
         }
       : s.aiSettings,
     promotionalOffer: s.promotionalOffer

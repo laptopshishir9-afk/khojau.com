@@ -699,67 +699,341 @@ export async function updateAdminCredentials(
   };
 }
 
+function evaluateClientMath(input: string): string | null {
+  const q = input.toLowerCase().trim();
+  const pctMatch = q.match(/(\d+(?:\.\d+)?)\s*(?:%|percent)\s*of\s*(\d+(?:\.\d+)?)/i);
+  if (pctMatch) {
+    const pct = parseFloat(pctMatch[1]);
+    const total = parseFloat(pctMatch[2]);
+    if (!isNaN(pct) && !isNaN(total)) {
+      const result = Number(((pct / 100) * total).toFixed(4));
+      return `**${result}** (${pct}% of ${total} = ${result}).`;
+    }
+  }
+  const sqrtMatch = q.match(/(?:square root of|sqrt\s*\(?)\s*(\d+(?:\.\d+)?)\)?/i);
+  if (sqrtMatch) {
+    const num = parseFloat(sqrtMatch[1]);
+    if (!isNaN(num) && num >= 0) {
+      const res = Number(Math.sqrt(num).toFixed(4));
+      return `The square root of ${num} is **${res}**.`;
+    }
+  }
+  const cleanedMath = q
+    .replace(/^(what is|calculate|compute|solve|evaluate|how much is|kati huncha)\s+/i, '')
+    .replace(/[?=]+$/g, '')
+    .replace(/\bplus\b/g, '+')
+    .replace(/\bminus\b/g, '-')
+    .replace(/\btimes\b|\bmultiplied by\b/g, '*')
+    .replace(/\bdivided by\b/g, '/')
+    .trim();
+
+  if (/^[\d\s+\-*/().^]+$/.test(cleanedMath) && /[\d]/.test(cleanedMath) && /[+\-*/^]/.test(cleanedMath)) {
+    try {
+      const jsExpr = cleanedMath.replace(/\^/g, '**');
+      const val = Function(`"use strict"; return (${jsExpr});`)();
+      if (typeof val === 'number' && isFinite(val)) {
+        const formatted = Number(val.toFixed(6));
+        return `**${formatted}** (${cleanedMath} = ${formatted}).`;
+      }
+    } catch {}
+  }
+  return null;
+}
+
 export async function sendAiChatMessage(payload: {
   message: string;
   history?: { role: string; text: string }[];
   currentProductId?: string;
+  customerName?: string | null;
 }): Promise<{ reply: string; recommendedProductIds: string[] }> {
+  const localDb = await fetchCloudStoreDB();
+  const s = localDb.settings;
+  const activeProducts = localDb.products.filter((p) => p.isVisible !== false);
+
   try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 20000);
     const res = await fetch(`${BASE_URL}/api/ai/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+      signal: controller.signal,
+      body: JSON.stringify({
+        ...payload,
+        storeContextOverride: {
+          settings: s,
+          products: activeProducts,
+        },
+      }),
     });
+    clearTimeout(timer);
+    if (res.status === 429) {
+      const errData = await res.json().catch(() => ({}));
+      return {
+        reply: errData.error || 'Too many messages sent in a short time. Please wait a moment and try again.',
+        recommendedProductIds: [],
+      };
+    }
     if (res.ok && res.headers.get('content-type')?.includes('application/json')) {
       return res.json();
     }
   } catch {}
 
-  const localDb = await fetchCloudStoreDB();
-  const s = localDb.settings;
-  const activeProducts = localDb.products.filter((p) => p.isVisible !== false);
-  const q = payload.message.toLowerCase();
+  const rawMsg = (payload.message || '').trim();
+  const q = rawMsg.toLowerCase().replace(/[?!.,]+$/g, '').trim();
+  const words = q.split(/\s+/).filter(Boolean);
+  const storeName = s.storeName || 'Khojau';
+  const assistantName = s.aiSettings?.assistantName || 'Khojau Saathi';
+  const storeAddress = s.storeAddress || 'Traffic Chowk, Butwal, Nepal';
+  const contactPhone = s.contactPhone || '+977-9801234567';
+  const contactEmail = s.contactEmail || 'support@khojau.com';
 
+  const cleanCustName =
+    payload.customerName &&
+    typeof payload.customerName === 'string' &&
+    payload.customerName.trim() &&
+    !payload.customerName.includes('@') &&
+    payload.customerName.trim().toLowerCase() !== 'undefined' &&
+    payload.customerName.trim().toLowerCase() !== 'null'
+      ? payload.customerName.trim().split(/\s+/)[0]
+      : null;
+  const namePrefix = cleanCustName ? ` ${cleanCustName}` : '';
+  const hasDevanagari = /[\u0900-\u097F]/.test(rawMsg);
+  const history = payload.history || [];
+  const lastAiMsg = [...history].reverse().find((h) => h.role === 'model')?.text || '';
+  const lastUserMsg = [...history].reverse().find((h) => h.role === 'user')?.text || '';
+
+  // 1. Short Greetings & Courtesies (Never repeat the full initial welcome message!)
+  if (/^(hi|hii+|hey|heyy+)$/i.test(q)) {
+    return {
+      reply: `Hi${namePrefix}! 😊 How can I help you today?`,
+      recommendedProductIds: [],
+    };
+  }
+  if (/^(hello|helloo+|hlw|hlo)$/i.test(q)) {
+    return {
+      reply: `Hello${namePrefix}! Welcome back. What can I help you find on ${storeName}?`,
+      recommendedProductIds: [],
+    };
+  }
+  if (/^(namaste|namaskar|नमस्ते|नमस्कार)$/i.test(q)) {
+    return {
+      reply: hasDevanagari
+        ? `नमस्ते${namePrefix}! 🙏 आज म तपाईंलाई कसरी सहयोग गर्न सक्छु?`
+        : `Namaste${namePrefix}! 🙏 How can I help you today?`,
+      recommendedProductIds: [],
+    };
+  }
   if (
-    q.includes('location') ||
-    q.includes('where') ||
-    q.includes('address') ||
-    q.includes('based') ||
-    q.includes('butwal')
+    /^(how are you|how r u|how are u|kasto chha|kasto xa|k छ|के छ|कस्तो छ|sanchai|सन्चै)$/i.test(q) ||
+    q === 'how are you doing'
   ) {
+    if (hasDevanagari || /kasto|sanchai/.test(q)) {
+      return {
+        reply: `म एकदमै ठीक छु, धन्यवाद! 😊 तपाईंलाई ${storeName} (खोजौँ) मा आज के खोज्न सहयोग गरूँ?`,
+        recommendedProductIds: [],
+      };
+    }
     return {
-      reply: `Namaste! 🙏 ${s.storeName} (खोजौँ) is proudly based in **Butwal, Nepal** (${s.storeAddress || 'Butwal, Nepal'}). We deliver across Butwal, Rupandehi, and all 7 provinces of Nepal.`,
+      reply: `I'm doing well, thank you! 😊 How can I help you with ${storeName} today?`,
       recommendedProductIds: [],
     };
   }
-  if (q.includes('payment') || q.includes('qr') || q.includes('esewa') || q.includes('khalti')) {
+  if (/^(thank you|thanks|thx|tq|dhanyabad|dhanyavad|धन्यवाद)$/i.test(q) || q.startsWith('thank you ')) {
+    if (hasDevanagari || /dhanyabad|dhanyavad/.test(q)) {
+      return {
+        reply: `तपाईंलाई धेरै धन्यवाद! 😊 अरू केही जानकारी चाहिएमा भन्नुहोला।`,
+        recommendedProductIds: [],
+      };
+    }
     return {
-      reply: `At ${s.storeName}, we accept Official QR Payments via ${s.qrPaymentSettings?.providerName || 'eSewa, Khalti, Fonepay & Mobile Banking'}. Simply scan our QR code at checkout and submit your Transaction ID for verification.`,
+      reply: `You're welcome! 😊 Let me know if you need anything else.`,
       recommendedProductIds: [],
     };
   }
-  if (q.includes('delivery') || q.includes('shipping') || q.includes('charge')) {
+  if (/^(bye|goodbye|good bye|see ya|tata|बाइ|बिदा)$/i.test(q)) {
     return {
-      reply: `Delivery from **Butwal, Nepal**:\n• Butwal & Rupandehi: Rs. ${s.deliveryKathmanduFee} (Free over Rs. ${s.freeDeliveryThreshold})\n• Outside Butwal Nationwide: Rs. ${s.deliveryOutsideFee} flat.`,
+      reply: `Goodbye${namePrefix}! 👋 Thank you for visiting ${storeName}. Have a great day!`,
       recommendedProductIds: [],
     };
   }
-  if (q.includes('founder') || q.includes('owner') || q.includes('shishir')) {
+  if (/^(ok|okay|okk|okie|हुन्छ|ठिक छ|thik xa|thik chha|la|ल)$/i.test(q)) {
     return {
-      reply: `**${s.founder?.name || 'Shishir Pokhrel'}** is the ${s.founder?.role || 'Founder & Owner of Khojau'}. ${s.founder?.bio || ''}`,
+      reply: hasDevanagari
+        ? `हस! 😊 तपाईंलाई सामान, मूल्य, वा डेलिभरी बारे केही सोध्न मन छ भने भन्नुहोला।`
+        : `Great! 👍 Let me know if you have any questions about our products, prices, or any other topic.`,
+      recommendedProductIds: [],
+    };
+  }
+  if (/^(help|सहयोग|maddat|madat)$/i.test(q)) {
+    return {
+      reply: `I'm here to help! 😊 You can ask me about:\n• **${storeName} Shopping:** Available products, prices, discounts, QR payment, delivery from Butwal, or order tracking\n• **General Questions:** Science, math, programming, English, Nepal facts, or everyday topics.\n\nWhat would you like to know?`,
+      recommendedProductIds: [],
+    };
+  }
+  if (/^(who are you|what is your name|timro naam k ho|तपाईं को हो)$/i.test(q)) {
+    return {
+      reply: `I am **${assistantName}**, the intelligent AI assistant for **${storeName} (खोजौँ)** in Butwal, Nepal! 😊`,
       recommendedProductIds: [],
     };
   }
 
-  // Match products if user asks about price or product name
+  // 2. Context-aware follow-up questions
+  if (/^(who created it|who made it|who owns it|who founded it|kasle banako|कसले बनाएको)$/i.test(q)) {
+    return {
+      reply: `**${storeName} (खोजौँ)** was founded by **${s.founder?.name || 'Shishir Pokhrel'}** (${s.founder?.role || 'Founder & Owner of Khojau'}) in Butwal, Nepal.`,
+      recommendedProductIds: [],
+    };
+  }
+  if (/^(how much does it cost|what is the price|how much is it|kati parcha|मूल्य कति हो|price kati ho)$/i.test(q)) {
+    const recentProduct = activeProducts.find(
+      (p) =>
+        p.id === payload.currentProductId ||
+        lastAiMsg.toLowerCase().includes(p.name.toLowerCase()) ||
+        lastUserMsg.toLowerCase().includes(p.name.toLowerCase())
+    );
+    if (recentProduct) {
+      const sellingPrice =
+        recentProduct.isDiscountActive !== false && recentProduct.discountPrice
+          ? recentProduct.discountPrice
+          : recentProduct.price;
+      return {
+        reply: `**${recentProduct.name}** costs **Rs. ${sellingPrice.toLocaleString()}** (${
+          recentProduct.stock > 0 ? `${recentProduct.stock} in stock` : 'Out of stock'
+        }).`,
+        recommendedProductIds: [recentProduct.id],
+      };
+    }
+  }
+
+  // 3. Math & Percentage Calculations
+  const mathReply = evaluateClientMath(rawMsg);
+  if (mathReply) {
+    return {
+      reply: mathReply,
+      recommendedProductIds: [],
+    };
+  }
+
+  // 4. Store Location
+  if (
+    /location|where is khojau|located|address|where are you based|office|hub|kaha xa|kaha chha|kata xa|kata chha|कहाँ छ|ठेगाना/i.test(q) &&
+    !/capital/.test(q)
+  ) {
+    if (hasDevanagari || /kaha|kata/.test(q)) {
+      return {
+        reply: `${storeName} (खोजौँ) नेपालको **बुटवल (${storeAddress})** मा अवस्थित छ। 🇳🇵 हामी बुटवलबाटै नेपालका सातै प्रदेशमा सुरक्षित डेलिभरी गर्छौं।`,
+        recommendedProductIds: [],
+      };
+    }
+    return {
+      reply: `**${storeName} (खोजौँ)** is proudly based in **Butwal, Nepal** (${storeAddress}). 🇳🇵 All orders are inspected and dispatched directly from our Butwal hub across Butwal, Rupandehi, and all 7 provinces of Nepal.`,
+      recommendedProductIds: [],
+    };
+  }
+
+  // 5. Order Tracking & How to Order
+  if (/track|where is my order|order status|mero order|अर्डर ट्र्याक|अर्डर कहाँ/i.test(q)) {
+    return {
+      reply: `To track your order on **${storeName}**:\n1. Click the **Account / Login** icon in the top navigation bar.\n2. Sign in with the email you used when ordering.\n3. Under **Recent Orders**, you can view your live order status (**Pending**, **Processing**, **Shipped**, or **Delivered**) and payment verification status.\n\nFor direct assistance with an order, you can also call or WhatsApp our Butwal team at **${contactPhone}**.`,
+      recommendedProductIds: [],
+    };
+  }
+  if (/how to order|how do i order|place an order|how to buy|kasari order|kasari kinne|कसरी अर्डर|कसरी किन्ने|how to use/i.test(q)) {
+    return {
+      reply: `Ordering on **${storeName} (खोजौँ)** is simple:\n1. Browse the catalog or search for a product and click **Add to Cart**.\n2. Open your **Cart** and click **Proceed to Checkout**.\n3. Enter your delivery details (Butwal/Rupandehi or anywhere in Nepal).\n4. Scan our official **QR Code** using eSewa, Khalti, Fonepay, or Mobile Banking and submit your **Transaction ID**.\n\nOur Butwal team will verify your payment and dispatch your order promptly!`,
+      recommendedProductIds: [],
+    };
+  }
+
+  // 6. Payment
+  if (/payment|qr|esewa|khalti|fonepay|mobile banking|cod|cash on delivery|kasari tirne|भुक्तानी|पैसा तिर्ने/i.test(q)) {
+    return {
+      reply: `At **${storeName}**, we accept secure **Official QR Payments** via **${s.qrPaymentSettings?.providerName || 'eSewa, Khalti, Fonepay & Mobile Banking'}** (Account: **${s.qrPaymentSettings?.accountName || 'Khojau Online Store'}**).\n\nSimply scan our QR code at checkout and submit your Transaction ID for verification. Cash on Delivery (COD) is not available.`,
+      recommendedProductIds: [],
+    };
+  }
+
+  // 7. Delivery
+  if (/delivery|shipping|charge|fee|how long|shipping cost|kati lagcha|डेलिभरी|ढुवानी/i.test(q)) {
+    return {
+      reply: `**Delivery Information from Butwal, Nepal:**\n• **Butwal & Rupandehi:** Rs. ${s.deliveryKathmanduFee} (FREE over Rs. ${s.freeDeliveryThreshold})\n• **Outside Butwal Nationwide:** Rs. ${s.deliveryOutsideFee} flat\n• **Timeline:** ${s.deliveryInfoText || '24-48 hours in Butwal, 2-4 business days nationwide.'}`,
+      recommendedProductIds: [],
+    };
+  }
+
+  // 8. Returns
+  if (/return|refund|exchange|replace|policy|damaged|defective|फिर्ता|रिटर्न/i.test(q)) {
+    return {
+      reply: `**${storeName} Return & Exchange Policy:**\n${s.returnPolicyText}\n\nFor assistance, contact us at **${contactPhone}** or **${contactEmail}**.`,
+      recommendedProductIds: [],
+    };
+  }
+
+  // 9. Contact
+  if (/contact|phone|call|email|whatsapp|support|number|सम्पर्क|फोन नम्बर/i.test(q)) {
+    return {
+      reply: `You can contact **${storeName} (खोजौँ)** in Butwal, Nepal anytime:\n• **Phone / WhatsApp:** ${contactPhone}\n• **Email:** ${contactEmail}\n• **Hub Address:** ${storeAddress}`,
+      recommendedProductIds: [],
+    };
+  }
+
+  // 10. Founder & About
+  if (/founder|owner|who started|who made|shishir|संस्थापक|मालिक/i.test(q)) {
+    return {
+      reply: `**${storeName} (खोजौँ)** was founded by **${s.founder?.name || 'Shishir Pokhrel'}** (${s.founder?.role || 'Founder & Owner of Khojau'}) in Butwal, Nepal. ${s.founder?.bio || ''}`,
+      recommendedProductIds: [],
+    };
+  }
+  if (/about khojau|what is khojau|story|mission|खोजौँ के हो/i.test(q)) {
+    return {
+      reply: `${s.aboutBrand?.aboutKhojau || 'Khojau (खोजौँ) is an online shopping store based in Butwal, Nepal.'}\n\n${s.aboutBrand?.brandDescription || ''}`,
+      recommendedProductIds: [],
+    };
+  }
+
+  // 11. General Knowledge, Science, Programming & Tech
+  if (/capital of nepal|nepal's capital|nepal ko rajdhani|नेपालको राजधानी/i.test(q)) {
+    return {
+      reply: `The capital of Nepal is **Kathmandu**! 🇳🇵`,
+      recommendedProductIds: [],
+    };
+  }
+  if (/photosynthesis|प्रकाश संश्लेषण/i.test(q)) {
+    return {
+      reply: `**Photosynthesis** is the natural process by which green plants use **sunlight**, **water**, and **carbon dioxide** to create their own food (**glucose**) and release **oxygen** into the air. 🌱`,
+      recommendedProductIds: [],
+    };
+  }
+  if (/artificial intelligence|what is ai\b|machine learning|how ai works/i.test(q)) {
+    return {
+      reply: `**Artificial Intelligence (AI)** is computer technology that enables software to understand language, learn from data, recognize patterns, and solve problems.\n\n**Everyday example:** Smart assistants like me (**${assistantName}**), voice recognition on your phone, and product recommendations use AI to help people every day!`,
+      recommendedProductIds: [],
+    };
+  }
+  if (/teach me python|learn python|what is python|python programming/i.test(q)) {
+    return {
+      reply: `**Python** is a beginner-friendly programming language widely used for web apps, data science, and AI.\n\nExample:\n\`\`\`python\nname = "${cleanCustName || 'Friend'}"\nprint(f"Namaste, {name}! Welcome to Python.")\n\`\`\`\nWould you like to learn about variables, loops, or functions next?`,
+      recommendedProductIds: [],
+    };
+  }
+  if (/build a website|make a website|create a website|web development/i.test(q)) {
+    return {
+      reply: `To build a modern website, you typically use **HTML** (structure), **CSS / Tailwind** (design), and **JavaScript / React** (interactivity). What kind of website would you like to build (e.g., a personal portfolio, blog, or online store)?`,
+      recommendedProductIds: [],
+    };
+  }
+
+  // 12. Match products if user asks about price or product name
   const matchedProds = activeProducts.filter(
     (p) =>
       q.includes(p.name.toLowerCase()) ||
       q.includes(p.category.toLowerCase()) ||
-      p.name
-        .toLowerCase()
-        .split(' ')
-        .some((w) => w.length > 3 && q.includes(w))
+      words.some(
+        (w) =>
+          w.length >= 3 &&
+          !['what', 'where', 'when', 'which', 'have', 'does', 'khojau', 'product', 'products', 'available', 'price', 'show', 'buy', 'can', 'the', 'and', 'for'].includes(w) &&
+          (p.name.toLowerCase().includes(w) || p.category.toLowerCase().includes(w) || (p.description || '').toLowerCase().includes(w))
+      )
   );
   if (matchedProds.length > 0) {
     const lines = matchedProds
@@ -767,13 +1041,30 @@ export async function sendAiChatMessage(payload: {
       .map((p) => `• **${p.name}** — Rs. ${(p.discountPrice || p.price).toLocaleString()} (${p.stock > 0 ? 'In Stock' : 'Out of Stock'})`)
       .join('\n');
     return {
-      reply: `Here are the latest details from **${s.storeName} (खोजौँ)**:\n${lines}`,
+      reply: `Here are the matching products from **${storeName} (खोजौँ)**:\n${lines}\n\nClick any product card below to open its product page!`,
       recommendedProductIds: matchedProds.slice(0, 3).map((p) => p.id),
     };
   }
 
+  if (/product|products|available|catalog|inventory|stock|items|what do you sell|what can i buy|के के पाइन्छ|सामान/i.test(q)) {
+    if (activeProducts.length === 0) {
+      return {
+        reply: `Right now, our **${storeName} (खोजौँ)** catalog has no products listed while our Butwal, Nepal team updates the inventory. Please check back soon or reach out to us at **${contactPhone}** (${contactEmail})!`,
+        recommendedProductIds: [],
+      };
+    }
+    const lines = activeProducts
+      .slice(0, 5)
+      .map((p) => `• **${p.name}** (${p.category}) — Rs. ${(p.discountPrice || p.price).toLocaleString()} (${p.stock > 0 ? 'In Stock' : 'Out of Stock'})`)
+      .join('\n');
+    return {
+      reply: `We currently have **${activeProducts.length} product${activeProducts.length === 1 ? '' : 's'}** available on **${storeName} (खोजौँ)**:\n${lines}\n\nClick any product below to view full details!`,
+      recommendedProductIds: activeProducts.slice(0, 3).map((p) => p.id),
+    };
+  }
+
   return {
-    reply: `Namaste! 🙏 I am **${s.aiSettings?.assistantName || 'Khojau Saathi'}**, your shopping guide at **${s.storeName} (खोजौँ)** in **Butwal, Nepal**. Feel free to ask about our products, prices, QR payment, or delivery across Nepal, or reach us at ${s.contactPhone} (${s.contactEmail}).`,
-    recommendedProductIds: activeProducts.slice(0, 3).map((p) => p.id),
+    reply: `I want to make sure I give you an accurate answer! 😊 Could you rephrase or tell me a bit more about what you'd like to know? You can ask me about **${storeName} (खोजौँ)** products, prices, QR payments, and delivery from Butwal, or ask general questions about science, math, coding, or Nepal.`,
+    recommendedProductIds: activeProducts.slice(0, 2).map((p) => p.id),
   };
 }

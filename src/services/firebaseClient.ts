@@ -18,11 +18,13 @@ export async function fetchCloudStoreDB(): Promise<LocalStoreDB> {
     if (snap.exists()) {
       const rawData = snap.data() as LocalStoreDB;
       const normalized = normalizeFullStoreDB(rawData);
-      // If cloud had old hero or old logo string, automatically persist the normalized Khojau settings back to cloud
+      // If cloud had old hero, old logo string, or old AI suggested questions, automatically persist the normalized Khojau settings back to cloud
       if (
         rawData?.settings?.heroBannerUrl?.includes('1791032655932') ||
         rawData?.settings?.logoUrl?.includes('liyau') ||
-        rawData?.settings?.storeName?.toLowerCase().includes('liyau')
+        rawData?.settings?.storeName?.toLowerCase().includes('liyau') ||
+        rawData?.settings?.aiSettings?.suggestedQuestions?.some((q: string) => /located in Nepal\?|How does QR payment work/i.test(q)) ||
+        /your shopping assistant for Khojau in Butwal|official AI shopping assistant/i.test(rawData?.settings?.aiSettings?.welcomeMessage || '')
       ) {
         setDoc(GLOBAL_STORE_DOC, JSON.parse(JSON.stringify({ ...normalized, updatedAt: Date.now() }))).catch(() => {});
       }

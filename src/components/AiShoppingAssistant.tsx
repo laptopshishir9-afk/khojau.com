@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Sparkles, X, Send, Bot, User, ArrowRight, CornerDownLeft, ShieldCheck, Tag } from 'lucide-react';
+import { Sparkles, X, Send, ArrowRight } from 'lucide-react';
 import { useStore } from '../context/StoreContext.tsx';
 import * as api from '../services/api.ts';
 import type { Product } from '../types/index.ts';
@@ -12,6 +12,23 @@ interface ChatMessage {
   timestamp: string;
 }
 
+function extractValidFirstName(rawName?: string | null): string | null {
+  if (!rawName || typeof rawName !== 'string') return null;
+  const cleaned = rawName.trim();
+  if (
+    !cleaned ||
+    cleaned.toLowerCase() === 'undefined' ||
+    cleaned.toLowerCase() === 'null' ||
+    cleaned.includes('@') ||
+    cleaned.toLowerCase() === 'customer' ||
+    cleaned.toLowerCase() === 'user'
+  ) {
+    return null;
+  }
+  const first = cleaned.split(/\s+/)[0];
+  return first && first.length >= 2 ? first : null;
+}
+
 export const AiShoppingAssistant: React.FC = () => {
   const {
     isAiAssistantOpen,
@@ -20,35 +37,85 @@ export const AiShoppingAssistant: React.FC = () => {
     settings,
     products,
     openProductDetail,
-    selectedProduct
+    selectedProduct,
+    currentUser
   } = useStore();
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const greetedUserIdRef = useRef<string | null>(null);
 
   const assistantName = settings?.aiSettings?.assistantName || 'Khojau Saathi';
   const brandName = settings?.storeName || 'Khojau';
   const nepaliName = settings?.websiteTexts?.topNepaliBrandText || 'खोजौँ';
 
-  // Initialize with greeting
-  useEffect(() => {
-    const defaultGreeting =
-      settings?.aiSettings?.welcomeMessage ||
-      `Namaste! 🙏 I am ${assistantName}, your official AI shopping assistant for ${brandName} (${nepaliName}) in Butwal, Nepal. Ask me about our live products, prices, QR payment, or delivery across Nepal!`;
+  const customerFirstName = extractValidFirstName(currentUser?.name);
 
+  const getInitialWelcomeText = (firstName: string | null): string => {
+    if (firstName) {
+      return `Hi ${firstName}! 👋 Welcome to ${brandName}. I'm ${assistantName}. How can I help you today?`;
+    }
+    return (
+      settings?.aiSettings?.welcomeMessage ||
+      `Namaste! 🙏 Welcome to ${brandName} (${nepaliName}). I am ${assistantName}, your shopping assistant. How can I help you today?`
+    );
+  };
+
+  // 1. Initialize chat session with welcome message once when a new chat session starts
+  useEffect(() => {
     if (messages.length === 0) {
+      if (currentUser?.id && customerFirstName) {
+        greetedUserIdRef.current = currentUser.id;
+      }
       setMessages([
         {
           id: 'msg-welcome',
           sender: 'ai',
-          text: defaultGreeting,
+          text: getInitialWelcomeText(customerFirstName),
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         }
       ]);
     }
-  }, [settings, messages.length, assistantName, brandName, nepaliName]);
+  }, [settings, messages.length, assistantName, brandName, nepaliName, customerFirstName, currentUser?.id]);
+
+  // 2. Personalized greeting once after customer logs in or creates an account
+  useEffect(() => {
+    if (!currentUser?.id) {
+      greetedUserIdRef.current = null;
+      return;
+    }
+
+    if (customerFirstName && greetedUserIdRef.current !== currentUser.id) {
+      greetedUserIdRef.current = currentUser.id;
+      const personalizedGreeting = `Hi ${customerFirstName}! 👋 Welcome to ${brandName}. I'm ${assistantName}. How can I help you today?`;
+
+      setMessages(prev => {
+        // If only the initial welcome message exists, update it in place so there are no duplicate greetings
+        if (prev.length <= 1 && prev[0]?.id === 'msg-welcome') {
+          return [
+            {
+              id: 'msg-welcome',
+              sender: 'ai',
+              text: personalizedGreeting,
+              timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            }
+          ];
+        }
+        // Otherwise append the personalized login welcome message once
+        return [
+          ...prev,
+          {
+            id: `ai-login-welcome-${currentUser.id}`,
+            sender: 'ai',
+            text: personalizedGreeting,
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          }
+        ];
+      });
+    }
+  }, [currentUser?.id, customerFirstName, brandName, assistantName]);
 
   // Handle incoming initial prompt
   useEffect(() => {
@@ -78,15 +145,18 @@ export const AiShoppingAssistant: React.FC = () => {
     setIsTyping(true);
 
     try {
-      const historyPayload = messages.map(m => ({
-        role: m.sender === 'user' ? 'user' : 'model',
-        text: m.text
-      }));
+      const historyPayload = messages
+        .filter(m => m.id !== 'msg-welcome' && !m.id.startsWith('ai-login-welcome-'))
+        .map(m => ({
+          role: m.sender === 'user' ? 'user' : 'model',
+          text: m.text
+        }));
 
       const res = await api.sendAiChatMessage({
         message: query,
         history: historyPayload,
-        currentProductId: selectedProduct?.id
+        currentProductId: selectedProduct?.id,
+        customerName: customerFirstName
       });
 
       // Find matching product objects
@@ -110,7 +180,7 @@ export const AiShoppingAssistant: React.FC = () => {
         {
           id: `ai-err-${Date.now()}`,
           sender: 'ai',
-          text: `Namaste! 🙏 I am experiencing a brief connection hiccup. ${brandName} (${nepaliName}) is based in Butwal, Nepal and you can explore our catalog or contact our Butwal team directly.`,
+          text: `I'm having a brief connection issue right now. Please try again in a moment, or reach our ${brandName} (${nepaliName}) support team in Butwal at ${settings?.contactPhone || '+977-9801234567'}.`,
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         }
       ]);
@@ -119,14 +189,19 @@ export const AiShoppingAssistant: React.FC = () => {
     }
   };
 
-  const samplePrompts = settings?.aiSettings?.suggestedQuestions?.length
-    ? settings.aiSettings.suggestedQuestions
-    : [
-        `Where is ${brandName} located in Nepal?`,
-        `How does QR payment work on ${brandName}?`,
-        'What are the delivery charges from Butwal?',
-        `Who is the founder of ${brandName}?`
-      ];
+  const defaultPrompts = [
+    'Where is Khojau located?',
+    'What products are available on Khojau?',
+    'How does payment work on Khojau?',
+    'How can I track my order?',
+    'How can I contact Khojau?'
+  ];
+
+  const configuredPrompts = (settings?.aiSettings?.suggestedQuestions || [])
+    .map(q => q.replace(/Liyau/gi, 'Khojau').replace(/लियौँ/g, 'खोजौँ').trim())
+    .filter(q => q && !/Where is Khojau located in Nepal\?|How does QR payment work on Khojau\?|What are the delivery charges from Butwal\?|Who is the founder of Khojau\?/i.test(q));
+
+  const samplePrompts = configuredPrompts.length > 0 ? configuredPrompts : defaultPrompts;
 
   if (settings?.aiSettings?.enabled === false) return null;
 
@@ -159,7 +234,11 @@ export const AiShoppingAssistant: React.FC = () => {
                   <h3 className="text-xs font-bold font-heading">{assistantName}</h3>
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
                 </div>
-                <p className="text-[10px] text-zinc-400">Grounded on {brandName} ({nepaliName}) Store Catalog</p>
+                <p className="text-[10px] text-zinc-400">
+                  {customerFirstName
+                    ? `Assisting ${customerFirstName} · ${brandName} (${nepaliName})`
+                    : `${brandName} (${nepaliName}) Smart Shopping Assistant`}
+                </p>
               </div>
             </div>
 
@@ -191,7 +270,7 @@ export const AiShoppingAssistant: React.FC = () => {
                   {msg.recommendedProducts && msg.recommendedProducts.length > 0 && (
                     <div className="mt-2.5 pt-2 border-t border-zinc-100 space-y-1.5">
                       <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
-                        Mentioned in Stock:
+                        View Product Page:
                       </p>
                       {msg.recommendedProducts.map(p => (
                         <div
@@ -228,7 +307,7 @@ export const AiShoppingAssistant: React.FC = () => {
                 <span className="w-2 h-2 rounded-full bg-red-600 animate-bounce"></span>
                 <span className="w-2 h-2 rounded-full bg-red-600 animate-bounce [animation-delay:0.2s]"></span>
                 <span className="w-2 h-2 rounded-full bg-red-600 animate-bounce [animation-delay:0.4s]"></span>
-                <span className="text-[11px] ml-1">{assistantName} is searching inventory...</span>
+                <span className="text-[11px] ml-1">{assistantName} is thinking...</span>
               </div>
             )}
 
@@ -255,7 +334,7 @@ export const AiShoppingAssistant: React.FC = () => {
               value={inputText}
               onChange={e => setInputText(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleSendMessage()}
-              placeholder="Ask about Butwal location, QR payment, or products..."
+              placeholder={`Ask ${assistantName} anything about ${brandName}...`}
               className="flex-1 text-xs p-2 bg-zinc-100 border border-zinc-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-red-600 placeholder:text-zinc-400"
             />
             <button
